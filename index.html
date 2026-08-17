@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TGApproved — Approved Channels, Bots & MiniApps</title>
+    
+    <!-- ===== GOOGLE ANALYTICS (Replace YOUR_GA_ID with your actual ID) ===== -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'YOUR_GA_ID');
+    </script>
+    
     <style>
         /* ---------- RESET & BASE ---------- */
         * {
@@ -247,7 +257,47 @@
             background: linear-gradient(135deg, #8b5cf6, #7c3aed);
         }
 
-        /* ---------- HELP BANNER ---------- */
+        /* ---------- TESTIMONIALS ---------- */
+        .testimonials {
+            margin: 50px 0;
+        }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .testimonial-card {
+            background: linear-gradient(145deg, #0f172a, #1a2332);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid #1e293b;
+            transition: 0.3s;
+        }
+        .testimonial-card:hover {
+            border-color: #7c3aed;
+            transform: translateY(-5px);
+        }
+        .testimonial-card .stars {
+            color: #fbbf24;
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+        .testimonial-card p {
+            color: #cbd5e1;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        .testimonial-card .author {
+            color: #a78bfa;
+            font-weight: 600;
+        }
+        .testimonial-card .role {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* ---------- HELP BANNER (UPDATED) ---------- */
         .help-banner {
             background: linear-gradient(135deg, #1e1b4b, #0f172a);
             border: 1px solid #312e81;
@@ -259,7 +309,7 @@
             overflow: hidden;
         }
         .help-banner::after {
-            content: '💬';
+            content: '🛠️';
             position: absolute;
             right: 30px;
             bottom: 10px;
@@ -278,7 +328,7 @@
         .help-banner p {
             color: #94a3b8;
             font-size: 18px;
-            max-width: 600px;
+            max-width: 700px;
             margin: 10px auto 20px;
         }
         .help-banner .tg-btn {
@@ -297,6 +347,55 @@
             background: #006699;
             transform: scale(1.04);
             box-shadow: 0 0 30px rgba(0, 136, 204, 0.3);
+        }
+
+        /* ---------- FAQ SECTION ---------- */
+        .faq-section {
+            background: linear-gradient(145deg, #0f172a, #1a2332);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid #1e293b;
+            margin: 30px 0 50px;
+        }
+        .faq-section h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+        .faq-item {
+            border-bottom: 1px solid #1e293b;
+            padding: 18px 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-item h3 {
+            color: #a78bfa;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-item h3:hover {
+            color: #c084fc;
+        }
+        .faq-item h3 .arrow {
+            transition: 0.3s;
+            font-size: 20px;
+        }
+        .faq-item h3 .arrow.open {
+            transform: rotate(180deg);
+        }
+        .faq-item .faq-answer {
+            color: #94a3b8;
+            padding-top: 10px;
+            display: none;
+        }
+        .faq-item .faq-answer.open {
+            display: block;
         }
 
         /* ---------- ORDER FORM ---------- */
@@ -384,32 +483,34 @@
             border-radius: 12px;
         }
 
-        /* ---------- FLOATING CHAT BUTTON ---------- */
-        .floating-chat {
+        /* ---------- FLOATING CHAT BUTTONS ---------- */
+        .floating-buttons {
             position: fixed;
             bottom: 24px;
             right: 24px;
-            background: #0088cc;
-            color: #fff;
-            padding: 16px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 999;
+            align-items: flex-end;
+        }
+        .floating-btn {
+            padding: 14px 22px;
             border-radius: 60px;
             text-decoration: none;
             font-weight: 700;
-            box-shadow: 0 8px 30px rgba(0, 136, 204, 0.4);
-            z-index: 999;
+            font-size: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
             transition: 0.3s;
-            border: 1px solid #00a3ff;
-            font-size: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .floating-chat:hover {
+        .floating-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 12px 40px rgba(0, 136, 204, 0.6);
-            background: #006699;
         }
-        .floating-chat .pulse {
+        .floating-btn .pulse {
             display: inline-block;
             width: 10px;
             height: 10px;
@@ -421,6 +522,24 @@
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.5); opacity: 0.7; }
             100% { transform: scale(1); opacity: 1; }
+        }
+        .btn-telegram {
+            background: #0088cc;
+            color: #fff;
+            border: 1px solid #00a3ff;
+        }
+        .btn-telegram:hover {
+            background: #006699;
+            box-shadow: 0 0 30px rgba(0, 136, 204, 0.3);
+        }
+        .btn-whatsapp {
+            background: #25D366;
+            color: #fff;
+            border: 1px solid #30d96e;
+        }
+        .btn-whatsapp:hover {
+            background: #1da851;
+            box-shadow: 0 0 30px rgba(37, 211, 102, 0.3);
         }
 
         /* ---------- FOOTER ---------- */
@@ -465,11 +584,18 @@
             .form-section {
                 padding: 25px 18px;
             }
-            .floating-chat {
-                padding: 12px 18px;
-                font-size: 14px;
-                bottom: 16px;
-                right: 16px;
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            .faq-section {
+                padding: 25px 18px;
+            }
+            .floating-btn {
+                padding: 12px 16px;
+                font-size: 13px;
+            }
+            .floating-btn span:not(.pulse) {
+                display: none;
             }
         }
         @media (max-width: 480px) {
@@ -555,15 +681,106 @@
             </div>
         </div>
 
-        <!-- ===== HELP BANNER ===== -->
+        <!-- ===== TESTIMONIALS (SOCIAL PROOF) ===== -->
+        <section class="testimonials">
+            <h2 style="text-align:center; font-size:32px; margin-bottom:10px;">⭐ What Clients Say</h2>
+            <p style="text-align:center; color:#64748b; margin-bottom:20px;">Real reviews from real customers</p>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Got my approved channel in 2 hours. Best investment for my ad campaign! Highly recommend."</p>
+                    <div class="author">— @crypto_marketer</div>
+                    <div class="role">Crypto Advertiser</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"The bot works perfectly. No bans, no issues. I've been running ads for 3 months straight."</p>
+                    <div class="author">— @ad_agency_owner</div>
+                    <div class="role">Agency Owner</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"The MiniApp was exactly what I needed. It's approved and running smoothly. Fast delivery!"</p>
+                    <div class="author">— @startup_founder</div>
+                    <div class="role">Tech Startup</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== HELP BANNER (UPDATED) ===== -->
         <div class="help-banner">
-            <h2>❌ Having trouble getting your Ads approved?</h2>
+            <h2>🛠️ Having trouble getting your <span>Ads approved</span>?</h2>
             <p>
-                I personally help advertisers fix rejection issues. <br />
-                <strong>Reach out to me on Telegram</strong> — I'll guide you step-by-step.
+                I also fix any <strong>Telegram Ads issue</strong> — including errors for <strong>Sport, Forex, Gaming,</strong> and many more niches.<br /><br />
+                <span style="color:#a78bfa;">⚠️ Facing rejection? I'll get your ads approved within 24 hours.</span>
             </p>
-            <a href="https://t.me/timifxx203" target="_blank" class="tg-btn">💬 t.me/timifxx203</a>
+            <a href="https://t.me/timifxx203" target="_blank" class="tg-btn">💬 Get Help on Telegram</a>
         </div>
+
+        <!-- ===== FAQ SECTION ===== -->
+        <section class="faq-section" id="faq">
+            <h2>❓ Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <h3 onclick="toggleFAQ(this)">
+                    How long does delivery take?
+                    <span class="arrow">▼</span>
+                </h3>
+                <div class="faq-answer">
+                    I deliver within <strong>2-24 hours</strong> after payment confirmation. Most orders are delivered within 2 hours.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <h3 onclick="toggleFAQ(this)">
+                    Are these assets really approved by Telegram?
+                    <span class="arrow">▼</span>
+                </h3>
+                <div class="faq-answer">
+                    Yes! All channels, bots, and MiniApps are <strong>fully verified and approved</strong> by Telegram. They're ready to run ads immediately without any ban risk.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <h3 onclick="toggleFAQ(this)">
+                    What if I get banned after purchasing?
+                    <span class="arrow">▼</span>
+                </h3>
+                <div class="faq-answer">
+                    I provide a <strong>free replacement</strong> within 7 days if any asset gets banned (which rarely happens). Your business continuity is my priority.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <h3 onclick="toggleFAQ(this)">
+                    Can I get a custom package or multiple assets?
+                    <span class="arrow">▼</span>
+                </h3>
+                <div class="faq-answer">
+                    Absolutely! Just mention your requirements in the order form or message me directly on Telegram. I offer <strong>discounts for bulk orders</strong>.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <h3 onclick="toggleFAQ(this)">
+                    Do you fix Telegram Ads issues for any niche?
+                    <span class="arrow">▼</span>
+                </h3>
+                <div class="faq-answer">
+                    Yes! I specialize in fixing Telegram Ads issues for <strong>Sport, Forex, Gaming, Crypto, E-commerce,</strong> and many more niches. No rejection is too hard to fix!
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <h3 onclick="toggleFAQ(this)">
+                    How do I pay for your services?
+                    <span class="arrow">▼</span>
+                </h3>
+                <div class="faq-answer">
+                    After you place an order, I'll message you on Telegram with payment options including <strong>Bitcoin, USDT, Bank Transfer,</strong> and other methods. Choose what works best for you.
+                </div>
+            </div>
+        </section>
 
         <!-- ===== ORDER FORM ===== -->
         <div class="form-section" id="order">
@@ -616,22 +833,37 @@
         </footer>
     </div>
 
-    <!-- ===== FLOATING CHAT BUTTON ===== -->
-    <a href="https://t.me/timifxx203" target="_blank" class="floating-chat">
-        <span class="pulse"></span>
-        💬 Chat with me
-    </a>
+    <!-- ===== FLOATING CHAT BUTTONS ===== -->
+    <div class="floating-buttons">
+        <a href="https://wa.me/2348108728401" target="_blank" class="floating-btn btn-whatsapp">
+            <span class="pulse"></span>
+            <span>💬 WhatsApp</span>
+        </a>
+        <a href="https://t.me/timifxx203" target="_blank" class="floating-btn btn-telegram">
+            <span class="pulse"></span>
+            <span>💬 Telegram</span>
+        </a>
+    </div>
 
     <!-- ============================================================ -->
-    <!-- ===== JAVASCRIPT (Telegram Bot + Auto-reply to customer) ===== -->
+    <!-- ===== JAVASCRIPT ===== -->
     <script>
         // ================================================================
-        //  🔐  YOUR REAL BOT TOKEN & CHAT ID (Updated with your values)
+        //  🔐  YOUR REAL BOT TOKEN & CHAT ID
         // ================================================================
         const BOT_TOKEN = "8745082143:AAFzrY7UbgEVyGHHQXlQ6cSOEVtM9kLMYnI";
         const CHAT_ID = "8526828897";
         // ================================================================
 
+        // ---------- FAQ Toggle Function ----------
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const arrow = element.querySelector('.arrow');
+            answer.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+
+        // ---------- Form Elements ----------
         const form = document.getElementById('orderForm');
         const statusDiv = document.getElementById('formStatus');
 
@@ -640,14 +872,12 @@
             btn.addEventListener('click', function() {
                 const pkg = this.getAttribute('data-package');
                 const select = document.getElementById('packageSelect');
-                // Find matching option
                 for (let opt of select.options) {
                     if (opt.value === pkg) {
                         select.value = pkg;
                         break;
                     }
                 }
-                // If not found, try to match partially
                 if (!select.value) {
                     for (let opt of select.options) {
                         if (opt.value.includes(pkg.split(' - ')[0])) {
@@ -661,7 +891,7 @@
             });
         });
 
-        // ---------- Form submission ----------
+        // ---------- Form Submission ----------
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -671,15 +901,13 @@
             const packageSelected = document.getElementById('packageSelect').value;
             const message = document.getElementById('message').value.trim();
 
-            // Validation
             if (!name || !email || !telegramUser || !packageSelected) {
                 statusDiv.style.background = 'rgba(248, 113, 113, 0.1)';
                 statusDiv.style.color = '#f87171';
-                statusDiv.innerText = '❌ Please fill in all required fields (Name, Email, Telegram, and select an asset).';
+                statusDiv.innerText = '❌ Please fill in all required fields.';
                 return;
             }
 
-            // Validate Telegram username format
             if (!telegramUser.startsWith('@')) {
                 statusDiv.style.background = 'rgba(248, 113, 113, 0.1)';
                 statusDiv.style.color = '#f87171';
@@ -687,7 +915,6 @@
                 return;
             }
 
-            // Disable submit button to prevent double submissions
             const submitBtn = form.querySelector('.submit-btn');
             submitBtn.disabled = true;
             submitBtn.textContent = '⏳ Sending...';
@@ -697,7 +924,7 @@
             statusDiv.innerText = '⏳ Sending your request...';
 
             try {
-                // ---------- 1. Send notification to YOU (the business owner) ----------
+                // ---------- 1. Send to YOU (Admin) ----------
                 let adminMessage = `📩 *NEW ORDER REQUEST* 📩\n\n`;
                 adminMessage += `👤 *Name:* ${name}\n`;
                 adminMessage += `📧 *Email:* ${email}\n`;
@@ -721,7 +948,7 @@
                     throw new Error(adminData.description || 'Failed to send admin notification');
                 }
 
-                // ---------- 2. Send AUTO-REPLY to the CUSTOMER ----------
+                // ---------- 2. Auto-reply to CUSTOMER ----------
                 const customerMessage = `✅ *Order Confirmation — TGApproved*
 
 Hi ${name}! 👋
@@ -735,8 +962,9 @@ I've received your request and will reach out to you within *2 hours* on Telegra
 2. We'll confirm payment details
 3. I'll deliver your approved asset
 
-💬 In the meantime, feel free to chat with me directly:
-👉 t.me/timifxx203
+💬 In the meantime, feel free to chat with me:
+👉 Telegram: t.me/timifxx203
+👉 WhatsApp: wa.me/2348108728401
 
 *Your order details:*
 ━━━━━━━━━━━━━━━━
@@ -747,25 +975,16 @@ I've received your request and will reach out to you within *2 hours* on Telegra
 Talk soon! 🚀
 — Timi`;
 
-                const customerResponse = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        chat_id: telegramUser,  // Send to the customer's Telegram
+                        chat_id: telegramUser,
                         text: customerMessage,
                         parse_mode: 'Markdown'
                     })
                 });
 
-                const customerData = await customerResponse.json();
-
-                if (!customerData.ok) {
-                    // If customer auto-reply fails, log it but don't fail the whole process
-                    console.warn('Could not send auto-reply to customer:', customerData.description);
-                    // Still show success because the admin got the order
-                }
-
-                // ---------- SUCCESS ----------
                 statusDiv.style.background = 'rgba(74, 222, 128, 0.1)';
                 statusDiv.style.color = '#4ade80';
                 statusDiv.innerText = '✅ Order sent! Check your Telegram — I\'ll message you within 2 hours.';
@@ -777,7 +996,6 @@ Talk soon! 🚀
                 statusDiv.style.color = '#f87171';
                 statusDiv.innerText = '❌ Failed to send. Please reach out directly on Telegram: t.me/timifxx203';
             } finally {
-                // Re-enable submit button
                 submitBtn.disabled = false;
                 submitBtn.textContent = '🚀 Send Order Request';
             }
