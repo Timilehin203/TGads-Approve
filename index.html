@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TGApproved — Approved Channels, Bots & MiniApps</title>
+    <style>
+        /* ---------- RESET & BASE ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #070b14;
+            color: #eef2ff;
+            line-height: 1.6;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* ---------- SCROLLBAR ---------- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #7c3aed;
+            border-radius: 10px;
+        }
+
+        /* ---------- HEADER ---------- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0 30px;
+            border-bottom: 1px solid #1e293b;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .logo span {
+            font-weight: 300;
+            background: none;
+            -webkit-text-fill-color: #94a3b8;
+            font-size: 18px;
+        }
+
+        .header-cta a {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: 0.3s;
+            border: 1px solid #8b5cf6;
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.15);
+        }
+        .header-cta a:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(124, 58, 237, 0.35);
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        /* ---------- HERO ---------- */
+        .hero {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+        .hero .badge {
+            display: inline-block;
+            background: rgba(124, 58, 237, 0.15);
+            color: #a78bfa;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid rgba(124, 58, 237, 0.25);
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+        .hero h1 {
+            font-size: 54px;
+            font-weight: 800;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #f0f4ff, #a78bfa, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 20px;
+            color: #94a3b8;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        .hero .highlight {
+            color: #c084fc;
+            font-weight: 600;
+        }
+        .hero .telegram-link {
+            display: inline-block;
+            background: #1e293b;
+            color: #eef2ff;
+            padding: 14px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid #334155;
+            transition: 0.3s;
+            margin: 0 8px;
+        }
+        .hero .telegram-link:hover {
+            border-color: #7c3aed;
+            background: #2d3b52;
+            transform: translateY(-2px);
+        }
+
+        /* ---------- SERVICES GRID ---------- */
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin: 60px 0 12px;
+            background: linear-gradient(135deg, #eef2ff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-sub {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0 50px;
+        }
+
+        .service-card {
+            background: linear-gradient(145deg, #0f172a, #1a2332);
+            padding: 35px 28px;
+            border-radius: 24px;
+            border: 1px solid #1e293b;
+            transition: 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, rgba(124, 58, 237, 0.03), transparent 60%);
+            pointer-events: none;
+        }
+        .service-card:hover {
+            border-color: #7c3aed;
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(124, 58, 237, 0.12);
+        }
+
+        .service-card .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .service-card h3 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #f0f4ff;
+        }
+        .service-card .price {
+            font-size: 38px;
+            font-weight: 800;
+            color: #a78bfa;
+            margin: 10px 0 16px;
+            letter-spacing: -1px;
+        }
+        .service-card .price small {
+            font-size: 18px;
+            font-weight: 400;
+            color: #64748b;
+        }
+        .service-card ul {
+            list-style: none;
+            margin: 20px 0 28px;
+            text-align: left;
+            padding: 0 10px;
+        }
+        .service-card ul li {
+            padding: 8px 0;
+            color: #cbd5e1;
+            border-bottom: 1px solid #1e293b;
+            font-size: 15px;
+        }
+        .service-card ul li::before {
+            content: "✅ ";
+            color: #a78bfa;
+        }
+
+        .order-btn {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: #fff;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 17px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            letter-spacing: 0.3px;
+        }
+        .order-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(124, 58, 237, 0.3);
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        /* ---------- HELP BANNER ---------- */
+        .help-banner {
+            background: linear-gradient(135deg, #1e1b4b, #0f172a);
+            border: 1px solid #312e81;
+            border-radius: 24px;
+            padding: 40px 50px;
+            margin: 30px 0 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .help-banner::after {
+            content: '💬';
+            position: absolute;
+            right: 30px;
+            bottom: 10px;
+            font-size: 120px;
+            opacity: 0.06;
+            pointer-events: none;
+        }
+        .help-banner h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #eef2ff;
+        }
+        .help-banner h2 span {
+            color: #a78bfa;
+        }
+        .help-banner p {
+            color: #94a3b8;
+            font-size: 18px;
+            max-width: 600px;
+            margin: 10px auto 20px;
+        }
+        .help-banner .tg-btn {
+            display: inline-block;
+            background: #0088cc;
+            color: #fff;
+            padding: 16px 48px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            transition: 0.3s;
+            border: 1px solid #00a3ff;
+        }
+        .help-banner .tg-btn:hover {
+            background: #006699;
+            transform: scale(1.04);
+            box-shadow: 0 0 30px rgba(0, 136, 204, 0.3);
+        }
+
+        /* ---------- ORDER FORM ---------- */
+        .form-section {
+            background: linear-gradient(145deg, #0f172a, #1a2332);
+            padding: 45px 40px;
+            border-radius: 24px;
+            border: 1px solid #1e293b;
+            margin: 20px 0 40px;
+        }
+        .form-section h2 {
+            font-size: 30px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .form-section .sub {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 22px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+        .form-group label .req {
+            color: #f87171;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1px solid #1e293b;
+            background: #070b14;
+            color: #eef2ff;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+        }
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: #fff;
+            border: none;
+            padding: 18px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 19px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            transform: scale(1.01);
+            box-shadow: 0 0 40px rgba(124, 58, 237, 0.25);
+        }
+        #formStatus {
+            margin-top: 18px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        /* ---------- FLOATING CHAT BUTTON ---------- */
+        .floating-chat {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0088cc;
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 8px 30px rgba(0, 136, 204, 0.4);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            border: 1px solid #00a3ff;
+            font-size: 16px;
+        }
+        .floating-chat:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(0, 136, 204, 0.6);
+            background: #006699;
+        }
+        .floating-chat .pulse {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ---------- FOOTER ---------- */
+        footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            color: #475569;
+            font-size: 14px;
+            border-top: 1px solid #1e293b;
+            margin-top: 30px;
+        }
+        footer a {
+            color: #a78bfa;
+            text-decoration: none;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 34px;
+            }
+            .hero p {
+                font-size: 17px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .help-banner {
+                padding: 30px 20px;
+            }
+            .help-banner h2 {
+                font-size: 24px;
+            }
+            header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .services {
+                grid-template-columns: 1fr;
+            }
+            .form-section {
+                padding: 25px 18px;
+            }
+            .floating-chat {
+                padding: 12px 18px;
+                font-size: 14px;
+                bottom: 16px;
+                right: 16px;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            .service-card .price {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ===== HEADER ===== -->
+        <header>
+            <div class="logo">TG<span>Approved</span></div>
+            <div class="header-cta">
+                <a href="#order">🚀 Get Started</a>
+            </div>
+        </header>
+
+        <!-- ===== HERO ===== -->
+        <section class="hero">
+            <div class="badge">🔥 Trusted by 500+ Telegram advertisers</div>
+            <h1>Approved Channels, Bots & MiniApps</h1>
+            <p>
+                Stop wasting time on rejections. Get <span class="highlight">pre-approved</span> Telegram assets
+                that are ready to run your ads <span class="highlight">today</span> — no waiting, no bans.
+            </p>
+            <div>
+                <a href="https://t.me/timifxx203" target="_blank" class="telegram-link">💬 Chat with me</a>
+                <a href="#services" class="telegram-link" style="background:#7c3aed;border-color:#7c3aed;">View Services ↓</a>
+            </div>
+        </section>
+
+        <!-- ===== SERVICES ===== -->
+        <h2 class="section-title" id="services">⚡ What I Offer</h2>
+        <p class="section-sub">Choose the asset you need — all are 100% approved &amp; ready to launch.</p>
+
+        <div class="services">
+            <!-- Channel -->
+            <div class="service-card">
+                <span class="icon">📢</span>
+                <h3>Approved Channel</h3>
+                <div class="price">$100 <small>one-time</small></div>
+                <ul>
+                    <li>Ready-to-run Telegram channel</li>
+                    <li>No ban risk — fully verified</li>
+                    <li>Instant delivery after payment</li>
+                    <li>Perfect for ad campaigns</li>
+                </ul>
+                <button class="order-btn" data-package="Approved Channel - $100">Buy Channel</button>
+            </div>
+
+            <!-- Bot -->
+            <div class="service-card">
+                <span class="icon">🤖</span>
+                <h3>Approved Bot</h3>
+                <div class="price">$60 <small>one-time</small></div>
+                <ul>
+                    <li>Pre-approved Telegram bot</li>
+                    <li>Can send bulk messages</li>
+                    <li>No spam restrictions</li>
+                    <li>Ready for marketing use</li>
+                </ul>
+                <button class="order-btn" data-package="Approved Bot - $60">Buy Bot</button>
+            </div>
+
+            <!-- MiniApp -->
+            <div class="service-card">
+                <span class="icon">📱</span>
+                <h3>Approved MiniApp</h3>
+                <div class="price">$80 <small>one-time</small></div>
+                <ul>
+                    <li>Telegram MiniApp ready</li>
+                    <li>Approved by Telegram team</li>
+                    <li>Can run ads &amp; collect leads</li>
+                    <li>Full source code included</li>
+                </ul>
+                <button class="order-btn" data-package="Approved MiniApp - $80">Buy MiniApp</button>
+            </div>
+        </div>
+
+        <!-- ===== HELP BANNER ===== -->
+        <div class="help-banner">
+            <h2>❌ Having trouble getting your Ads approved?</h2>
+            <p>
+                I personally help advertisers fix rejection issues. <br />
+                <strong>Reach out to me on Telegram</strong> — I'll guide you step-by-step.
+            </p>
+            <a href="https://t.me/timifxx203" target="_blank" class="tg-btn">💬 t.me/timifxx203</a>
+        </div>
+
+        <!-- ===== ORDER FORM ===== -->
+        <div class="form-section" id="order">
+            <h2>📋 Order Your Approved Asset</h2>
+            <p class="sub">Fill in your details and I'll get back to you within 2 hours.</p>
+
+            <form id="orderForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name <span class="req">*</span></label>
+                        <input type="text" id="name" placeholder="e.g. John Doe" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address <span class="req">*</span></label>
+                        <input type="email" id="email" placeholder="john@example.com" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Telegram Username <span class="req">*</span></label>
+                    <input type="text" id="telegramUser" placeholder="@john_doe" required />
+                    <small style="color:#64748b; font-size:13px;">I'll message you here to finalize your order</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Which asset do you want? <span class="req">*</span></label>
+                    <select id="packageSelect" required>
+                        <option value="">— Select —</option>
+                        <option value="Approved Channel - $100">📢 Approved Channel — $100</option>
+                        <option value="Approved Bot - $60">🤖 Approved Bot — $60</option>
+                        <option value="Approved MiniApp - $80">📱 Approved MiniApp — $80</option>
+                        <option value="Multiple / Custom">📦 Multiple assets or custom request</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Additional details (optional)</label>
+                    <textarea id="message" placeholder="Tell me more about your campaign, niche, or any special requirements..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">🚀 Send Order Request</button>
+                <div id="formStatus"></div>
+            </form>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer>
+            &copy; 2026 TGApproved — Telegram Ads Solutions.<br />
+            Built for marketers who need results. 🚀
+        </footer>
+    </div>
+
+    <!-- ===== FLOATING CHAT BUTTON ===== -->
+    <a href="https://t.me/timifxx203" target="_blank" class="floating-chat">
+        <span class="pulse"></span>
+        💬 Chat with me
+    </a>
+
+    <!-- ============================================================ -->
+    <!-- ===== JAVASCRIPT (Telegram Bot + Auto-reply to customer) ===== -->
+    <script>
+        // ================================================================
+        //  🔐  REPLACE THESE WITH YOUR REAL BOT TOKEN & CHAT ID
+        // ================================================================
+        const BOT_TOKEN = "8745082143:AAFzrY7UbgEVyGHHQXlQ6cSOEVtM9kLMYnI";   // from @BotFather
+        const CHAT_ID = "8526828897";       // from @userinfobot
+        // ================================================================
+
+        const form = document.getElementById('orderForm');
+        const statusDiv = document.getElementById('formStatus');
+
+        // ---------- "Order" buttons on cards scroll to form & pre-fill ----------
+        document.querySelectorAll('.order-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const pkg = this.getAttribute('data-package');
+                const select = document.getElementById('packageSelect');
+                // Find matching option
+                for (let opt of select.options) {
+                    if (opt.value === pkg) {
+                        select.value = pkg;
+                        break;
+                    }
+                }
+                // If not found, try to match partially
+                if (!select.value) {
+                    for (let opt of select.options) {
+                        if (opt.value.includes(pkg.split(' - ')[0])) {
+                            select.value = opt.value;
+                            break;
+                        }
+                    }
+                }
+                document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('name').focus();
+            });
+        });
+
+        // ---------- Form submission ----------
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telegramUser = document.getElementById('telegramUser').value.trim();
+            const packageSelected = document.getElementById('packageSelect').value;
+            const message = document.getElementById('message').value.trim();
+
+            // Validation
+            if (!name || !email || !telegramUser || !packageSelected) {
+                statusDiv.style.background = 'rgba(248, 113, 113, 0.1)';
+                statusDiv.style.color = '#f87171';
+                statusDiv.innerText = '❌ Please fill in all required fields (Name, Email, Telegram, and select an asset).';
+                return;
+            }
+
+            // Validate Telegram username format
+            if (!telegramUser.startsWith('@')) {
+                statusDiv.style.background = 'rgba(248, 113, 113, 0.1)';
+                statusDiv.style.color = '#f87171';
+                statusDiv.innerText = '❌ Telegram username must start with @ (e.g., @john_doe)';
+                return;
+            }
+
+            // Disable submit button to prevent double submissions
+            const submitBtn = form.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Sending...';
+
+            statusDiv.style.background = 'rgba(167, 139, 250, 0.1)';
+            statusDiv.style.color = '#a78bfa';
+            statusDiv.innerText = '⏳ Sending your request...';
+
+            try {
+                // ---------- 1. Send notification to YOU (the business owner) ----------
+                let adminMessage = `📩 *NEW ORDER REQUEST* 📩\n\n`;
+                adminMessage += `👤 *Name:* ${name}\n`;
+                adminMessage += `📧 *Email:* ${email}\n`;
+                adminMessage += `📱 *Telegram:* ${telegramUser}\n`;
+                adminMessage += `📦 *Asset:* ${packageSelected}\n`;
+                adminMessage += `📝 *Details:* ${message || 'None'}`;
+
+                const adminResponse = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: adminMessage,
+                        parse_mode: 'Markdown'
+                    })
+                });
+
+                const adminData = await adminResponse.json();
+
+                if (!adminData.ok) {
+                    throw new Error(adminData.description || 'Failed to send admin notification');
+                }
+
+                // ---------- 2. Send AUTO-REPLY to the CUSTOMER ----------
+                const customerMessage = `✅ *Order Confirmation — TGApproved*
+
+Hi ${name}! 👋
+
+Thanks for ordering the *${packageSelected}*.
+
+I've received your request and will reach out to you within *2 hours* on Telegram (${telegramUser}) to finalize everything.
+
+📌 *Next steps:*
+1. I'll message you on Telegram
+2. We'll confirm payment details
+3. I'll deliver your approved asset
+
+💬 In the meantime, feel free to chat with me directly:
+👉 t.me/timifxx203
+
+*Your order details:*
+━━━━━━━━━━━━━━━━
+📦 Asset: ${packageSelected}
+📧 Email: ${email}
+━━━━━━━━━━━━━━━━
+
+Talk soon! 🚀
+— Timi`;
+
+                const customerResponse = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: telegramUser,  // Send to the customer's Telegram
+                        text: customerMessage,
+                        parse_mode: 'Markdown'
+                    })
+                });
+
+                const customerData = await customerResponse.json();
+
+                if (!customerData.ok) {
+                    // If customer auto-reply fails, log it but don't fail the whole process
+                    console.warn('Could not send auto-reply to customer:', customerData.description);
+                    // Still show success because the admin got the order
+                }
+
+                // ---------- SUCCESS ----------
+                statusDiv.style.background = 'rgba(74, 222, 128, 0.1)';
+                statusDiv.style.color = '#4ade80';
+                statusDiv.innerText = '✅ Order sent! Check your Telegram — I\'ll message you within 2 hours.';
+                form.reset();
+
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.style.background = 'rgba(248, 113, 113, 0.1)';
+                statusDiv.style.color = '#f87171';
+                statusDiv.innerText = '❌ Failed to send. Please reach out directly on Telegram: t.me/timifxx203';
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 Send Order Request';
+            }
+        });
+    </script>
+</body>
+</html>
