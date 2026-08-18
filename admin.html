@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TGApproved — Admin Panel</title>
+    <style>
+        /* ---------- RESET ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #070b14;
+            color: #eef2ff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ---------- HEADER ---------- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0 30px;
+            border-bottom: 1px solid #1e293b;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .admin-badge {
+            background: #7c3aed;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .header-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .header-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .header-links a:hover {
+            color: #a78bfa;
+        }
+        .header-links .btn-logout {
+            background: rgba(248, 113, 113, 0.15);
+            color: #f87171;
+            padding: 6px 16px;
+            border-radius: 50px;
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .header-links .btn-logout:hover {
+            background: rgba(248, 113, 113, 0.25);
+        }
+
+        /* ---------- STATS ---------- */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin: 25px 0 30px;
+        }
+        .stat-card {
+            background: linear-gradient(145deg, #0f172a, #1a2332);
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px solid #1e293b;
+            text-align: center;
+        }
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: 800;
+            color: #a78bfa;
+        }
+        .stat-card .label {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        .stat-card .number.green {
+            color: #4ade80;
+        }
+        .stat-card .number.yellow {
+            color: #facc15;
+        }
+        .stat-card .number.blue {
+            color: #60a5fa;
+        }
+        .stat-card .number.red {
+            color: #f87171;
+        }
+
+        /* ---------- ORDER TABLE ---------- */
+        .table-container {
+            background: linear-gradient(145deg, #0f172a, #1a2332);
+            border-radius: 20px;
+            border: 1px solid #1e293b;
+            overflow: hidden;
+            margin: 20px 0 30px;
+        }
+
+        .table-header {
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1e293b;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .table-header h2 {
+            font-size: 20px;
+        }
+        .table-header .btn-add {
+            background: #7c3aed;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+        .table-header .btn-add:hover {
+            background: #6d28d9;
+            transform: scale(1.02);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            text-align: left;
+            padding: 14px 18px;
+            color: #64748b;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #1e293b;
+        }
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #1e293b;
+            font-size: 14px;
+        }
+        tr:hover td {
+            background: rgba(124, 58, 237, 0.03);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-badge.pending {
+            background: rgba(250, 204, 21, 0.15);
+            color: #facc15;
+        }
+        .status-badge.inprogress {
+            background: rgba(96, 165, 250, 0.15);
+            color: #60a5fa;
+        }
+        .status-badge.delivered {
+            background: rgba(74, 222, 128, 0.15);
+            color: #4ade80;
+        }
+        .status-badge.declined {
+            background: rgba(248, 113, 113, 0.15);
+            color: #f87171;
+        }
+
+        .btn-action {
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 2px;
+        }
+        .btn-action:hover {
+            transform: scale(1.05);
+        }
+        .btn-edit {
+            background: rgba(96, 165, 250, 0.15);
+            color: #60a5fa;
+        }
+        .btn-edit:hover {
+            background: rgba(96, 165, 250, 0.25);
+        }
+        .btn-delete {
+            background: rgba(248, 113, 113, 0.15);
+            color: #f87171;
+        }
+        .btn-delete:hover {
+            background: rgba(248, 113, 113, 0.25);
+        }
+
+        /* ---------- MODAL ---------- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: #0f172a;
+            border-radius: 24px;
+            padding: 35px;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid #1e293b;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .modal .form-group {
+            margin-bottom: 16px;
+        }
+        .modal .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #cbd5e1;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .modal .form-group input,
+        .modal .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #1e293b;
+            background: #070b14;
+            color: #eef2ff;
+            font-size: 14px;
+        }
+        .modal .form-group input:focus,
+        .modal .form-group select:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+        }
+        .modal .btn-save {
+            background: #7c3aed;
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .modal .btn-save:hover {
+            background: #6d28d9;
+        }
+        .modal .btn-cancel {
+            background: transparent;
+            color: #64748b;
+            border: 1px solid #1e293b;
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        .modal .btn-cancel:hover {
+            border-color: #334155;
+            color: #94a3b8;
+        }
+
+        /* ---------- ALERT ---------- */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin: 10px 0;
+            display: none;
+        }
+        .alert.success {
+            display: block;
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+            border: 1px solid rgba(74, 222, 128, 0.2);
+        }
+        .alert.error {
+            display: block;
+            background: rgba(248, 113, 113, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(248, 113, 113, 0.2);
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            table {
+                font-size: 12px;
+            }
+            th, td {
+                padding: 10px 12px;
+            }
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            .modal {
+                padding: 25px;
+            }
+        }
+        @media (max-width: 600px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            table {
+                font-size: 11px;
+            }
+            th, td {
+                padding: 8px 10px;
+            }
+            .header-links {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ===== HEADER ===== -->
+        <header>
+            <div>
+                <span class="logo">TGApproved</span>
+                <span class="admin-badge">🔐 Admin</span>
+            </div>
+            <div class="header-links">
+                <a href="https://timilehin203.github.io/TGads-Approve/" target="_blank">🌐 View Website</a>
+                <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+            </div>
+        </header>
+
+        <!-- ===== STATS ===== -->
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="number" id="totalOrders">0</div>
+                <div class="label">📦 Total Orders</div>
+            </div>
+            <div class="stat-card">
+                <div class="number yellow" id="pendingOrders">0</div>
+                <div class="label">⏳ Pending</div>
+            </div>
+            <div class="stat-card">
+                <div class="number blue" id="inprogressOrders">0</div>
+                <div class="label">⚙️ In Progress</div>
+            </div>
+            <div class="stat-card">
+                <div class="number green" id="deliveredOrders">0</div>
+                <div class="label">✅ Delivered</div>
+            </div>
+            <div class="stat-card">
+                <div class="number red" id="declinedOrders">0</div>
+                <div class="label">❌ Declined</div>
+            </div>
+        </div>
+
+        <!-- ===== ALERT ===== -->
+        <div id="alert" class="alert"></div>
+
+        <!-- ===== ORDER TABLE ===== -->
+        <div class="table-container">
+            <div class="table-header">
+                <h2>📋 All Orders</h2>
+                <button class="btn-add" onclick="openModal('add')">➕ Add New Order</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Service</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Orders will be rendered here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ===== MODAL (Add/Edit) ===== -->
+        <div class="modal-overlay" id="modal">
+            <div class="modal">
+                <h3 id="modalTitle">Add New Order</h3>
+                <form id="modalForm">
+                    <div class="form-group">
+                        <label>Order ID</label>
+                        <input type="text" id="modalOrderId" placeholder="e.g., TG-2024-005" />
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Telegram</label>
+                        <input type="text" id="modalCustomer" placeholder="@customer_username" />
+                    </div>
+                    <div class="form-group">
+                        <label>Service</label>
+                        <input type="text" id="modalService" placeholder="e.g., Approved Channel - $150" />
+                    </div>
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="text" id="modalPrice" placeholder="e.g., $150" />
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="modalStatus">
+                            <option value="pending">🟡 Pending</option>
+                            <option value="inprogress">🔵 In Progress</option>
+                            <option value="delivered">🟢 Delivered</option>
+                            <option value="declined">🔴 Declined</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="text" id="modalDate" placeholder="e.g., Dec 20, 2024" />
+                    </div>
+                    <button type="submit" class="btn-save">💾 Save Order</button>
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ================================================================
+        //  🔐  ADMIN PASSWORD (Change this)
+        // ================================================================
+        const ADMIN_PASSWORD = "admin123";
+        // ================================================================
+
+        // ================================================================
+        //  📦  ORDERS DATABASE — SYNC WITH INDEX.HTML
+        //  ================================================================
+        //  ⚠️  IMPORTANT: When you change orders here, also update index.html!
+        //  ================================================================
+        let orders = [
+            { "id": "TG-2024-001", "customer": "@crypto_marketer", "service": "Approved Channel - $150", "price": "$150", "status": "delivered", "date": "Dec 15, 2024" },
+            { "id": "TG-2024-002", "customer": "@ad_agency_owner", "service": "Approved Bot - $70", "price": "$70", "status": "inprogress", "date": "Dec 18, 2024" },
+            { "id": "TG-2024-003", "customer": "@startup_founder", "service": "Approved Mini App - $90", "price": "$90", "status": "declined", "date": "Dec 12, 2024" },
+            { "id": "TG-2024-004", "customer": "@gaming_ads", "service": "Telegram Ads Approval Assistance - $40", "price": "$40", "status": "pending", "date": "Dec 19, 2024" }
+        ];
+
+        // ================================================================
+        //  🔐  LOGIN CHECK
+        // ================================================================
+        function checkLogin() {
+            if (!sessionStorage.getItem('adminLoggedIn')) {
+                const password = prompt('🔐 Enter Admin Password:');
+                if (password === ADMIN_PASSWORD) {
+                    sessionStorage.setItem('adminLoggedIn', 'true');
+                } else {
+                    alert('❌ Incorrect password!');
+                    window.location.href = 'https://timilehin203.github.io/TGads-Approve/';
+                }
+            }
+        }
+
+        // ================================================================
+        //  🚪  LOGOUT
+        // ================================================================
+        function logout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            window.location.href = 'https://timilehin203.github.io/TGads-Approve/';
+        }
+
+        // ================================================================
+        //  📊  RENDER ORDERS TABLE
+        // ================================================================
+        function renderOrders() {
+            const tbody = document.getElementById('ordersTableBody');
+            
+            if (orders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align:center; color:#64748b; padding:30px;">
+                            📭 No orders yet. Add your first order!
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = orders.map(order => `
+                    <tr>
+                        <td><strong>${order.id}</strong></td>
+                        <td>${order.customer}</td>
+                        <td>${order.service}</td>
+                        <td>${order.price}</td>
+                        <td><span class="status-badge ${order.status}">${getStatusLabel(order.status)}</span></td>
+                        <td>${order.date}</td>
+                        <td>
+                            <button class="btn-action btn-edit" onclick="openModal('edit', '${order.id}')">✏️ Edit</button>
+                            <button class="btn-action btn-delete" onclick="deleteOrder('${order.id}')">🗑️</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            updateStats();
+        }
+
+        // ================================================================
+        //  📊  UPDATE STATS
+        // ================================================================
+        function updateStats() {
+            const total = orders.length;
+            const pending = orders.filter(o => o.status === 'pending').length;
+            const inprogress = orders.filter(o => o.status === 'inprogress').length;
+            const delivered = orders.filter(o => o.status === 'delivered').length;
+            const declined = orders.filter(o => o.status === 'declined').length;
+
+            document.getElementById('totalOrders').textContent = total;
+            document.getElementById('pendingOrders').textContent = pending;
+            document.getElementById('inprogressOrders').textContent = inprogress;
+            document.getElementById('deliveredOrders').textContent = delivered;
+            document.getElementById('declinedOrders').textContent = declined;
+        }
+
+        // ================================================================
+        //  🏷️  STATUS LABEL
+        // ================================================================
+        function getStatusLabel(status) {
+            const map = {
+                'pending': '🟡 Pending',
+                'inprogress': '🔵 In Progress',
+                'delivered': '🟢 Delivered',
+                'declined': '🔴 Declined'
+            };
+            return map[status] || status;
+        }
+
+        // ================================================================
+        //  ➕  MODAL
+        // ================================================================
+        let modalMode = 'add';
+        let editOrderId = null;
+
+        function openModal(mode, orderId = null) {
+            modalMode = mode;
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modalTitle');
+            const form = document.getElementById('modalForm');
+
+            if (mode === 'add') {
+                title.textContent = '➕ Add New Order';
+                document.getElementById('modalOrderId').value = generateOrderId();
+                document.getElementById('modalCustomer').value = '';
+                document.getElementById('modalService').value = '';
+                document.getElementById('modalPrice').value = '';
+                document.getElementById('modalStatus').value = 'pending';
+                document.getElementById('modalDate').value = getTodayDate();
+                editOrderId = null;
+            } else {
+                title.textContent = '✏️ Edit Order';
+                const order = orders.find(o => o.id === orderId);
+                if (order) {
+                    document.getElementById('modalOrderId').value = order.id;
+                    document.getElementById('modalCustomer').value = order.customer;
+                    document.getElementById('modalService').value = order.service;
+                    document.getElementById('modalPrice').value = order.price;
+                    document.getElementById('modalStatus').value = order.status;
+                    document.getElementById('modalDate').value = order.date;
+                    editOrderId = orderId;
+                }
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.getElementById('modalForm').reset();
+        }
+
+        // ================================================================
+        //  💾  SAVE ORDER (Add/Edit)
+        // ================================================================
+        document.getElementById('modalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('modalOrderId').value.trim();
+            const customer = document.getElementById('modalCustomer').value.trim();
+            const service = document.getElementById('modalService').value.trim();
+            const price = document.getElementById('modalPrice').value.trim();
+            const status = document.getElementById('modalStatus').value;
+            const date = document.getElementById('modalDate').value.trim();
+
+            if (!id || !customer || !service || !price || !date) {
+                showAlert('❌ Please fill in all fields.', 'error');
+                return;
+            }
+
+            const newOrder = { id, customer, service, price, status, date };
+
+            if (modalMode === 'add') {
+                // Check if order ID already exists
+                if (orders.find(o => o.id === id)) {
+                    showAlert('❌ Order ID already exists!', 'error');
+                    return;
+                }
+                orders.push(newOrder);
+                showAlert('✅ Order added successfully!', 'success');
+            } else {
+                // Edit mode
+                const index = orders.findIndex(o => o.id === editOrderId);
+                if (index !== -1) {
+                    orders[index] = newOrder;
+                    showAlert('✅ Order updated successfully!', 'success');
+                }
+            }
+
+            // Save to localStorage
+            saveOrders();
+
+            // Re-render
+            renderOrders();
+            closeModal();
+        });
+
+        // ================================================================
+        //  🗑️  DELETE ORDER
+        // ================================================================
+        function deleteOrder(orderId) {
+            if (confirm(`⚠️ Are you sure you want to delete order ${orderId}?`)) {
+                orders = orders.filter(o => o.id !== orderId);
+                saveOrders();
+                renderOrders();
+                showAlert('🗑️ Order deleted successfully.', 'success');
+            }
+        }
+
+        // ================================================================
+        //  💾  SAVE ORDERS TO localStorage
+        // ================================================================
+        function saveOrders() {
+            localStorage.setItem('admin_orders', JSON.stringify(orders));
+        }
+
+        // ================================================================
+        //  📥  LOAD ORDERS FROM localStorage
+        // ================================================================
+        function loadOrders() {
+            const saved = localStorage.getItem('admin_orders');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.length > 0) {
+                        orders = parsed;
+                    }
+                } catch (e) {
+                    console.log('Using default orders');
+                }
+            }
+        }
+
+        // ================================================================
+        //  📋  HELPER FUNCTIONS
+        // ================================================================
+        function generateOrderId() {
+            const year = new Date().getFullYear();
+            const count = orders.length + 1;
+            return `TG-${year}-${String(count).padStart(3, '0')}`;
+        }
+
+        function getTodayDate() {
+            const now = new Date();
+            return now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function showAlert(message, type = 'success') {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert ${type}`;
+            alert.style.display = 'block';
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 4000);
+        }
+
+        // ================================================================
+        //  📋  COPY ORDERS TO INDEX.HTML (Manual)
+        // ================================================================
+        function copyOrdersToIndex() {
+            const orderString = JSON.stringify(orders, null, 4);
+            const instructions = `
+    📋 COPY THIS INTO index.html:
+    
+    Find the "orders" array in index.html (around line 590) and replace it with:
+    
+    const orders = ${orderString};
+    
+    ⚠️ Make sure to keep the EXACT same format!
+            `;
+            console.log(instructions);
+            alert('✅ Check the browser console (F12) for the code to copy!');
+        }
+
+        // ================================================================
+        //  🚀  INIT
+        // ================================================================
+        loadOrders();
+        checkLogin();
+        renderOrders();
+
+        // Show copy instructions in console
+        console.log('%c📋 Admin Panel Ready!', 'font-size:20px; color:#a78bfa;');
+        console.log('%cTo copy orders to index.html, run: copyOrdersToIndex()', 'color:#94a3b8;');
+
+        // ================================================================
+        //  ⌨️  KEYBOARD SHORTCUTS
+        // ================================================================
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
