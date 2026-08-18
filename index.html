@@ -1272,7 +1272,7 @@
     <!-- ============================================================ -->
     <!-- ===== JAVASCRIPT ===== -->
     <script>
-                // ================================================================
+        // ================================================================
         //  🔐  YOUR REAL BOT TOKEN & CHAT ID
         // ================================================================
         const BOT_TOKEN = "8745082143:AAFzrY7UbgEVyGHHQXlQ6cSOEVtM9kLMYnI";
@@ -1444,7 +1444,7 @@
         });
 
         // ================================================================
-        //  🚀  SEND MESSAGE TO TELEGRAM (FIXED)
+        //  🚀  SEND TO TELEGRAM
         //  ================================================================
         async function sendTelegramMessage(chatId, text) {
             try {
@@ -1459,10 +1459,10 @@
                     })
                 });
                 const data = await response.json();
-                console.log('📨 Telegram send result:', data);
+                console.log('📨 Telegram result:', data);
                 return data;
             } catch (error) {
-                console.error('❌ Failed to send Telegram message:', error);
+                console.error('❌ Telegram error:', error);
                 return null;
             }
         }
@@ -1505,7 +1505,7 @@
             statusDiv.innerText = '⏳ Sending your request...';
 
             try {
-                // ---------- 1. Admin Notification (You) ----------
+                // ----- 1. Send to Admin (YOU) -----
                 let adminMessage = `📩 *NEW ORDER* 📩\n\n`;
                 adminMessage += `🆔 *Order ID:* ${orderId}\n`;
                 adminMessage += `👤 *Name:* ${name}\n`;
@@ -1518,7 +1518,7 @@
 
                 await sendTelegramMessage(CHAT_ID, adminMessage);
 
-                // ---------- 2. Send Order ID to Customer via Telegram ----------
+                // ----- 2. Send Order ID to Customer -----
                 const customerMessage = `✅ *Order Confirmation — TGApproved*
 
 Hi ${name}! 👋
@@ -1544,14 +1544,12 @@ I'll reach out within *2 hours* on Telegram (${telegramUser}).
 Talk soon! 🚀
 — Timi`;
 
-                // Try to send to customer
                 const customerResult = await sendTelegramMessage(telegramUser, customerMessage);
 
-                // ---------- 3. If Telegram fails, notify admin to message customer ----------
+                // ----- 3. If customer message fails, notify admin -----
                 if (!customerResult || !customerResult.ok) {
                     console.log('⚠️ Could not send to customer automatically');
                     
-                    // Send follow-up to admin
                     const followUpMessage = `⚠️ *COULD NOT AUTO-SEND TO CUSTOMER*\n\n`;
                     followUpMessage += `Order ID: ${orderId}\n`;
                     followUpMessage += `Customer: ${telegramUser}\n\n`;
@@ -1559,7 +1557,6 @@ Talk soon! 🚀
 
                     await sendTelegramMessage(CHAT_ID, followUpMessage);
 
-                    // Show success to customer anyway (they'll get a message from you manually)
                     statusDiv.style.background = 'rgba(74, 222, 128, 0.1)';
                     statusDiv.style.color = '#4ade80';
                     statusDiv.innerHTML = `
@@ -1583,7 +1580,7 @@ Talk soon! 🚀
                     return;
                 }
 
-                // ---------- 4. Success! ----------
+                // ----- 4. Success! -----
                 statusDiv.style.background = 'rgba(74, 222, 128, 0.1)';
                 statusDiv.style.color = '#4ade80';
                 statusDiv.innerHTML = `
@@ -1623,3 +1620,6 @@ Talk soon! 🚀
 
         console.log('✅ TGApproved website loaded successfully!');
         console.log('📊 Orders loaded:', orders.length);
+    </script>
+</body>
+</html>
