@@ -1272,7 +1272,7 @@
     <!-- ============================================================ -->
     <!-- ===== JAVASCRIPT ===== -->
     <script>
-        // ================================================================
+                // ================================================================
         //  🔐  YOUR REAL BOT TOKEN & CHAT ID
         // ================================================================
         const BOT_TOKEN = "8745082143:AAFzrY7UbgEVyGHHQXlQ6cSOEVtM9kLMYnI";
@@ -1282,10 +1282,6 @@
         // ================================================================
         //  📦  ORDERS DATABASE — UPDATE THIS MANUALLY
         //  ================================================================
-        //  To add a new order, copy this format and paste it inside the array:
-        //  { "id": "TG-2024-001", "customer": "@username", "service": "Service Name - $XX", "price": "$XX", "status": "pending", "date": "Dec 20, 2024" }
-        //  Status options: pending, inprogress, delivered, declined
-        // ================================================================
         const orders = [
             { "id": "TG-2024-001", "customer": "@crypto_marketer", "service": "Approved Channel - $150", "price": "$150", "status": "delivered", "date": "Dec 15, 2024" },
             { "id": "TG-2024-002", "customer": "@ad_agency_owner", "service": "Approved Bot - $70", "price": "$70", "status": "inprogress", "date": "Dec 18, 2024" },
@@ -1309,7 +1305,6 @@
                 return;
             }
 
-            // Find the order
             const order = orders.find(o => o.id.toUpperCase() === input);
 
             if (!order) {
@@ -1322,7 +1317,6 @@
                 return;
             }
 
-            // Build status display
             const statusMap = {
                 'pending': { label: '🟡 Pending', class: 'pending' },
                 'inprogress': { label: '🔵 In Progress', class: 'inprogress' },
@@ -1332,7 +1326,6 @@
 
             const statusInfo = statusMap[order.status] || statusMap['pending'];
 
-            // Timeline steps
             let steps = [
                 { label: '✅ Order Placed', status: 'completed' },
                 { label: '⚙️ Processing', status: order.status === 'pending' ? 'inactive' : order.status === 'declined' ? 'declined' : 'completed' },
@@ -1408,7 +1401,6 @@
                 btn.textContent = '✅ Copied!';
                 setTimeout(() => { btn.textContent = originalText; }, 2000);
             }).catch(() => {
-                // Fallback
                 const input = document.createElement('input');
                 input.value = url;
                 document.body.appendChild(input);
@@ -1428,7 +1420,6 @@
         const form = document.getElementById('orderForm');
         const statusDiv = document.getElementById('formStatus');
 
-        // Generate Order ID
         function generateOrderId() {
             const now = new Date();
             const year = now.getFullYear();
@@ -1452,7 +1443,33 @@
             });
         });
 
-        // Form submission
+        // ================================================================
+        //  🚀  SEND MESSAGE TO TELEGRAM (FIXED)
+        //  ================================================================
+        async function sendTelegramMessage(chatId, text) {
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: text,
+                        parse_mode: 'Markdown',
+                        disable_web_page_preview: true
+                    })
+                });
+                const data = await response.json();
+                console.log('📨 Telegram send result:', data);
+                return data;
+            } catch (error) {
+                console.error('❌ Failed to send Telegram message:', error);
+                return null;
+            }
+        }
+
+        // ================================================================
+        //  📝  FORM SUBMISSION
+        //  ================================================================
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -1488,7 +1505,7 @@
             statusDiv.innerText = '⏳ Sending your request...';
 
             try {
-                // --- 1. Admin Notification ---
+                // ---------- 1. Admin Notification (You) ----------
                 let adminMessage = `📩 *NEW ORDER* 📩\n\n`;
                 adminMessage += `🆔 *Order ID:* ${orderId}\n`;
                 adminMessage += `👤 *Name:* ${name}\n`;
@@ -1499,17 +1516,9 @@
                 adminMessage += `📌 *To add to tracking:* Copy this into orders array:\n`;
                 adminMessage += `{ "id": "${orderId}", "customer": "${telegramUser}", "service": "${packageSelected}", "price": "$${packageSelected.split(' - ')[1] || 'Custom'}", "status": "pending", "date": "${today}" }`;
 
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: adminMessage,
-                        parse_mode: 'Markdown'
-                    })
-                });
+                await sendTelegramMessage(CHAT_ID, adminMessage);
 
-                // --- 2. Auto-reply to Customer ---
+                // ---------- 2. Send Order ID to Customer via Telegram ----------
                 const customerMessage = `✅ *Order Confirmation — TGApproved*
 
 Hi ${name}! 👋
@@ -1519,11 +1528,11 @@ Thanks for ordering: *${packageSelected}*
 🆔 *Your Order ID:* \`${orderId}\`
 
 📌 *Track your order anytime:*
-${window.location.href}#tracking
+${window.location.href.split('#')[0]}#tracking
 
 I'll reach out within *2 hours* on Telegram (${telegramUser}).
 
-💬 Chat with me:
+💬 *Chat with me:*
 👉 Telegram: t.me/timifxx203
 👉 WhatsApp: wa.me/2348108728401
 
@@ -1535,16 +1544,46 @@ I'll reach out within *2 hours* on Telegram (${telegramUser}).
 Talk soon! 🚀
 — Timi`;
 
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: telegramUser,
-                        text: customerMessage,
-                        parse_mode: 'Markdown'
-                    })
-                });
+                // Try to send to customer
+                const customerResult = await sendTelegramMessage(telegramUser, customerMessage);
 
+                // ---------- 3. If Telegram fails, notify admin to message customer ----------
+                if (!customerResult || !customerResult.ok) {
+                    console.log('⚠️ Could not send to customer automatically');
+                    
+                    // Send follow-up to admin
+                    const followUpMessage = `⚠️ *COULD NOT AUTO-SEND TO CUSTOMER*\n\n`;
+                    followUpMessage += `Order ID: ${orderId}\n`;
+                    followUpMessage += `Customer: ${telegramUser}\n\n`;
+                    followUpMessage += `📌 Please message the customer manually with their Order ID!`;
+
+                    await sendTelegramMessage(CHAT_ID, followUpMessage);
+
+                    // Show success to customer anyway (they'll get a message from you manually)
+                    statusDiv.style.background = 'rgba(74, 222, 128, 0.1)';
+                    statusDiv.style.color = '#4ade80';
+                    statusDiv.innerHTML = `
+                        ✅ Order placed successfully!
+                        <br>
+                        🆔 <strong>Order ID: ${orderId}</strong>
+                        <br>
+                        <span style="font-size:13px; color:#facc15;">
+                            ⚠️ Please message me on Telegram to confirm your order:
+                            <a href="https://t.me/timifxx203" style="color:#a78bfa;">t.me/timifxx203</a>
+                        </span>
+                        <br>
+                        <span style="font-size:13px; color:#94a3b8;">
+                            Or track your order: 
+                            <a href="#tracking" style="color:#a78bfa;">Track Order</a>
+                        </span>
+                    `;
+                    form.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '🚀 Send Order Request';
+                    return;
+                }
+
+                // ---------- 4. Success! ----------
                 statusDiv.style.background = 'rgba(74, 222, 128, 0.1)';
                 statusDiv.style.color = '#4ade80';
                 statusDiv.innerHTML = `
@@ -1553,17 +1592,22 @@ Talk soon! 🚀
                     🆔 <strong>Order ID: ${orderId}</strong>
                     <br>
                     <span style="font-size:13px; color:#94a3b8;">
-                        Save this ID to track your order:
+                        Check your Telegram — I've sent your Order ID there!
+                        <br>
+                        Or track your order: 
                         <a href="#tracking" style="color:#a78bfa;">Track Order</a>
                     </span>
                 `;
                 form.reset();
 
             } catch (error) {
-                console.error('Error:', error);
+                console.error('❌ Error:', error);
                 statusDiv.style.background = 'rgba(248, 113, 113, 0.1)';
                 statusDiv.style.color = '#f87171';
-                statusDiv.innerText = '❌ Failed to send. Please reach out directly on Telegram: t.me/timifxx203';
+                statusDiv.innerHTML = `
+                    ❌ Failed to send. Please reach out directly on Telegram: 
+                    <a href="https://t.me/timifxx203" style="color:#a78bfa;">t.me/timifxx203</a>
+                `;
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = '🚀 Send Order Request';
@@ -1576,6 +1620,6 @@ Talk soon! 🚀
         if (window.location.hash === '#tracking') {
             document.getElementById('trackInput').focus();
         }
-    </script>
-</body>
-</html>
+
+        console.log('✅ TGApproved website loaded successfully!');
+        console.log('📊 Orders loaded:', orders.length);
